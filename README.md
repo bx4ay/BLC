@@ -16,4 +16,4 @@ Hello, world!
 ```
 
 ## BLC ってなに
-[ここ](https://tromp.github.io/cl/Binary_lambda_calculus.html) などが詳しい　まともなインタプリタも置いてある → https://tromp.github.io/cl/cl.html
+[ここ](https://tromp.github.io/cl/Binary_lambda_calculus.html) などが詳しい　まともなインタプリタも置いてある → [tromp.github.io/cl/cl.html](https://tromp.github.io/cl/cl.html)
