@@ -58,7 +58,7 @@ toBin = concatMap (reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . f
 
 fromBin :: [Bool] -> [Char]
 fromBin x
-    | length x < 8 = ""
+    | null $ drop 7 x = ""
     | otherwise = toEnum (foldl (\ y z -> 2 * y + fromEnum z) 0 $ take 8 x) : fromBin (drop 8 x)
 
 encode :: [Char] -> Expr
