@@ -6,4 +6,4 @@ Haskell で書かれた [Binary lambda calculus](https://esolangs.org/wiki/Binar
 ```blc8.hs``` - BLC8 (下記リンク参照) のインタプリタ
 
 ## BLC ってなに
-[ここ](https://tromp.github.io/cl/Binary_lambda_calculus.html) などが詳しい　まともなインタプリタも置いてある
+[ここ](https://tromp.github.io/cl/Binary_lambda_calculus.html) などが詳しい　まともなインタプリタも置いてある → https://tromp.github.io/cl/cl.html
