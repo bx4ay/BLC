@@ -1,7 +1,7 @@
 import Data.List (unfoldr)
 import System.Environment (getArgs)
 
-data Expr = I Int | L Expr | A Expr Expr
+data Expr = I Int | L Expr | A Expr Expr -- variable / abstraction / application
     | Cint Int | Csuc | Cbool Bool -- for Church decoding
 
 -- evaluation
@@ -13,26 +13,24 @@ eval (A x y) = apply (eval x) $ eval y
         apply (L x) y = eval $ beta 0 x y
         apply Csuc (Cint i) = Cint $ i + 1
         apply x y = A x y
-eval x = x
 
-beta :: Int -> Expr -> Expr -> Expr
-beta i (I j) x
-    | i < j = I $ j - 1
-    | i > j = I j
-    | otherwise = beta' 0 i x
-    where
+        beta :: Int -> Expr -> Expr -> Expr
+        beta i (I j) x
+            | i < j = I $ j - 1
+            | i == j = beta' 0 i x
+        beta i (L x) y = L $ beta (i + 1) x y
+        beta i (A x y) z = A (beta i x z) $ beta i y z
+        beta _ x _ = x
+
         beta' :: Int -> Int -> Expr -> Expr
         beta' i j (I k)
-            | i > k = I k
-            | otherwise = I $ j + k
+            | i <= k = I $ j + k
         beta' i j (L x) = L $ beta' (i + 1) j x
         beta' i j (A x y) = A (beta' i j x) $ beta' i j y
         beta' _ _ x = x
-beta i (L x) y = L $ beta (i + 1) x y
-beta i (A x y) z = A (beta i x z) $ beta i y z
-beta _ x _ = x
+eval x = x
 
--- Church encoding
+-- Church encoding / decoding
 cint :: Int -> Expr
 cint = (iterate (\ (L (L x)) -> L $ L $ A (I 1) x) (L $ L $ I 0) !!)
 
