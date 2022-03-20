@@ -1,5 +1,5 @@
 # BLC
-Haskell で書かれた [Binary lambda calculus](https://esolangs.org/wiki/Binary_lambda_calculus) のインタプリタ
+Haskell で書かれた [inary lambda calculus](https://esolangs.org/wiki/Binary_lambda_calculus) のインタプリタ
 
 `README.md` - これ  
 `blc.hs` - BLC のインタプリタ  
