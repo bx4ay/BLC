@@ -78,16 +78,16 @@ toExpr :: [Char] -> Expr
 toExpr = head . foldl f [] . snd . foldl g (Nothing, [])
     where
         f :: [Expr] -> Int -> [Expr]
-        f (x : t) (- 2) = L x : t
-        f (x : y : t) (- 1) = A x y : t
-        f t i = I i : t
+        f (x : t) 0 = L x : t
+        f (x : y : t) 1 = A x y : t
+        f t i = I (- i - 1) : t
 
         g :: (Maybe Int, [Int]) -> Char -> (Maybe Int, [Int])
         g (Nothing, t) '0' = (Just 0, t)
         g (Nothing, t) '1' = (Just 1, t)
-        g (Just 0, t) '0' = (Nothing, - 2 : t)
-        g (Just 0, t) '1' = (Nothing, - 1 : t)
-        g (Just i, t) '0' = (Nothing, i - 1 : t)
+        g (Just 0, t) '0' = (Nothing, 0 : t)
+        g (Just 0, t) '1' = (Nothing, 1 : t)
+        g (Just i, t) '0' = (Nothing, - i : t)
         g (Just i, t) '1' = (Just $ i + 1, t)
         g t _ = t
 
