@@ -30,7 +30,7 @@ eval (A x y) = apply (eval x) $ eval y
 
 -- Church encoding / decoding
 cint :: Int -> Expr
-cint = L . L . (iterate (A (I 1)) (I 0) !!)
+cint = L . L . (iterate (A $ I 1) (I 0) !!)
 
 uncint :: Expr -> Int
 uncint (L (L (I 0))) = 0
@@ -56,7 +56,7 @@ unclist x
     | otherwise = eval (A x $ L $ L $ I 1) : unclist (eval $ A x $ L $ L $ I 0)
 
 toBin :: [Char] -> [Bool]
-toBin = concatMap (reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum)
+toBin = concatMap $ reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum
 
 fromBin :: [Bool] -> [Char]
 fromBin x
