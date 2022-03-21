@@ -14,6 +14,13 @@ Hello, world!
 $ runghc blc.hs skk.blc < test.in
 Hello, world!
 ```
+できること:
+- β-簡約
+- 遅延評価 (たぶん)
+
+できないこと:
+- η-変換
+- エラーを吐くこと
 
 ## BLC ってなに
 [ラムダ計算](https://ja.wikipedia.org/wiki/%E3%83%A9%E3%83%A0%E3%83%80%E8%A8%88%E7%AE%97) を`0`と`1`で書きあらわしたもの
