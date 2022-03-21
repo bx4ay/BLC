@@ -30,11 +30,11 @@ eval (A x y) = apply (eval x) $ eval y
 
 -- Church encoding / decoding
 cint :: Int -> Expr
-cint = (iterate (\ (L (L x)) -> L $ L $ A (I 1) x) (L $ L $ I 0) !!)
+cint = L . L . (iterate (A (I 1)) (I 0) !!)
 
 uncint :: Expr -> Int
 uncint (L (L (I 0))) = 0
-uncint (L (L (A (I 1) x))) = uncint x + 1
+uncint (L (L (A (I 1) x))) = uncint (L $ L x) + 1
 uncint x = uncint $ eval $ A (A x $ L $ L $ L $ A (I 1) $ A (A (I 2) $ I 1) $ I 0) $ L $ L $ I 0
 
 cbool :: Bool -> Expr
