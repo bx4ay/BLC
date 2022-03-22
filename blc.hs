@@ -3,23 +3,6 @@ import System.Environment (getArgs)
 
 data Expr = I Int | L Expr | A Expr Expr
 
-fromCode :: [Char] -> Expr
-fromCode = head . foldl f [] . tail . foldl g [0]
-    where
-        f :: [Expr] -> Int -> [Expr]
-        f (x : t) 0 = L x : t
-        f (x : y : t) 1 = A x y : t
-        f t i = I (i - 2) : t
-
-        g :: [Int] -> Char -> [Int]
-        g (0 : t) '0' = 1 : t
-        g (0 : t) '1' = 2 : t
-        g (1 : t) '0' = 0 : 0 : t
-        g (1 : t) '1' = 0 : 1 : t
-        g (i : t) '0' = 0 : i : t
-        g (i : t) '1' = i + 1 : t
-        g t _ = t
-
 eval :: Expr -> Expr
 eval (I i) = I i
 eval (L x) = L $ eval x
@@ -43,6 +26,23 @@ eval (A x y) = apply (eval x) $ eval y
             | otherwise = I k
         beta' i j (L x) = L $ beta' (i + 1) j x
         beta' i j (A x y) = A (beta' i j x) $ beta' i j y
+
+fromCode :: [Char] -> Expr
+fromCode = head . foldl f [] . tail . foldl g [0]
+    where
+        f :: [Expr] -> Int -> [Expr]
+        f (x : t) 0 = L x : t
+        f (x : y : t) 1 = A x y : t
+        f t i = I (i - 2) : t
+
+        g :: [Int] -> Char -> [Int]
+        g (0 : t) '0' = 1 : t
+        g (0 : t) '1' = 2 : t
+        g (1 : t) '0' = 0 : 0 : t
+        g (1 : t) '1' = 0 : 1 : t
+        g (i : t) '0' = 0 : i : t
+        g (i : t) '1' = i + 1 : t
+        g t _ = t
 
 church :: [Char] -> Expr
 church = clist . map cbool . toBin
