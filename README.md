@@ -2,8 +2,7 @@
 Haskell で書かれた [binary lambda calculus](https://esolangs.org/wiki/Binary_lambda_calculus) のインタプリタ
 
 `README.md` - これ  
-`blc.hs` - BLC のインタプリタ  
-`blc8.hs` - BLC8 (下記リンク参照) のインタプリタ
+`blc.hs` - BLC のインタプリタ
 
 正しく動作する場合があることが示されています (`skk.blc`は SKI コンビネータ計算の **S K K** にあたる, 入力をそのまま返すプログラム) :
 ```console
