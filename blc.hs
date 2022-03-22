@@ -45,7 +45,16 @@ eval (A x y) = apply (eval x) $ eval y
         beta' i j (A x y) = A (beta' i j x) $ beta' i j y
 
 encode :: [Char] -> Expr
-encode = foldr (\ x -> L . A (A (I 0) $ L $ L $ I $ fromEnum x)) (L $ L $ I 0) . concatMap (reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum)
+encode = clist . map cbool . toBin
+    where
+        clist :: [Expr] -> Expr
+        clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
+
+        cbool :: Bool -> Expr
+        cbool = L . L . I . fromEnum
+
+        toBin :: [Char] -> [Bool]
+        toBin = concatMap $ reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum
 
 decode :: Expr -> [Char]
 decode = fromBin . map uncbool . unclist
