@@ -45,35 +45,29 @@ fromCode = head . foldl f [] . tail . foldl g [0]
         g t _ = t
 
 church :: [Char] -> Expr
-church = clist . map cbool . toBin
+church = clist . concatMap cbool
     where
         clist :: [Expr] -> Expr
         clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
 
-        cbool :: Bool -> Expr
-        cbool = L . L . I . fromEnum
-
-        toBin :: [Char] -> [Bool]
-        toBin = concatMap $ reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum
+        cbool :: Char -> [Expr]
+        cbool '1' = [L $ L $ I 1]
+        cbool '0' = [L $ L $ I 0]
+        cbool _ = []
 
 unchurch :: Expr -> [Char]
-unchurch = fromBin . map uncbool . unclist
+unchurch = map uncbool . unclist
     where
-        fromBin :: [Bool] -> [Char]
-        fromBin x
-            | null $ drop 7 x = []
-            | otherwise = toEnum (foldl (\ y z -> 2 * y + fromEnum z) 0 $ take 8 x) : fromBin (drop 8 x)
-
-        uncbool :: Expr -> Bool
-        uncbool (L (L (I 1))) = True
-        uncbool (L (L (I 0))) = False
+        uncbool :: Expr -> Char
+        uncbool (L (L (I 1))) = '1'
+        uncbool (L (L (I 0))) = '0'
         uncbool x = uncbool $ eval $ A (A x $ L $ L $ I 1) $ L $ L $ I 0
 
         unclist :: Expr -> [Expr]
         unclist (L (L (I 0))) = []
         unclist (L (A (A (I 0) x) y)) = x : unclist y
         unclist x
-            | uncbool $ eval $ A (A x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1 = []
+            | uncbool (eval $ A (A x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1) == '1' = []
             | otherwise = eval (A x $ L $ L $ I 1) : unclist (eval $ A x $ L $ L $ I 0)
 
 main :: IO ()
