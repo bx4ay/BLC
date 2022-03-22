@@ -25,4 +25,4 @@ Hello, world!
 ## BLC ってなに
 [ラムダ計算](https://ja.wikipedia.org/wiki/%E3%83%A9%E3%83%A0%E3%83%80%E8%A8%88%E7%AE%97) を`0`と`1`で書きあらわしたもの
 
-[ここ](https://tromp.github.io/cl/Binary_lambda_calculus.html) などが詳しい　まともなインタプリタも置いてある → [tromp.github.io/cl/cl.html](https://tromp.github.io/cl/cl.html)
+詳しくは [tromp.github.io/cl/cl.html](https://tromp.github.io/cl/cl.html) に載っている [説明](https://tromp.github.io/cl/Binary_lambda_calculus.html) を見てください
