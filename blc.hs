@@ -3,8 +3,8 @@ import System.Environment (getArgs)
 
 data Expr = I Int | L Expr | A Expr Expr
 
-toExpr :: [Char] -> Expr
-toExpr = head . foldl f [] . snd . foldl g (Nothing, [])
+fromCode :: [Char] -> Expr
+fromCode = head . foldl f [] . snd . foldl g (Nothing, [])
     where
         f :: [Expr] -> Int -> [Expr]
         f (x : t) 0 = L x : t
@@ -44,8 +44,8 @@ eval (A x y) = apply (eval x) $ eval y
         beta' i j (L x) = L $ beta' (i + 1) j x
         beta' i j (A x y) = A (beta' i j x) $ beta' i j y
 
-encode :: [Char] -> Expr
-encode = clist . map cbool . toBin
+church :: [Char] -> Expr
+church = clist . map cbool . toBin
     where
         clist :: [Expr] -> Expr
         clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
@@ -56,8 +56,8 @@ encode = clist . map cbool . toBin
         toBin :: [Char] -> [Bool]
         toBin = concatMap $ reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum
 
-decode :: Expr -> [Char]
-decode = fromBin . map uncbool . unclist
+unchurch :: Expr -> [Char]
+unchurch = fromBin . map uncbool . unclist
     where
         fromBin :: [Bool] -> [Char]
         fromBin x
@@ -81,4 +81,4 @@ main = do
     [path] <- getArgs
     code <- readFile path
     input <- getContents
-    putStr $ decode $ A (toExpr code) $ encode input
+    putStr $ unchurch $ A (fromCode code) $ church input
