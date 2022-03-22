@@ -4,19 +4,19 @@ import System.Environment (getArgs)
 data Expr = I Int | L Expr | A Expr Expr
 
 fromCode :: [Char] -> Expr
-fromCode = head . foldl f [] . tail . foldl g [- 1]
+fromCode = head . foldl f [] . tail . foldl g [0]
     where
         f :: [Expr] -> Int -> [Expr]
         f (x : t) 0 = L x : t
         f (x : y : t) 1 = A x y : t
-        f t i = I (- i - 1) : t
+        f t i = I (i - 2) : t
 
         g :: [Int] -> Char -> [Int]
-        g (- 1 : t) '0' = 0 : t
-        g (- 1 : t) '1' = 1 : t
-        g (0 : t) '0' = - 1 : 0 : t
-        g (0 : t) '1' = - 1 : 1 : t
-        g (i : t) '0' = - 1 : - i : t
+        g (0 : t) '0' = 1 : t
+        g (0 : t) '1' = 2 : t
+        g (1 : t) '0' = 0 : 0 : t
+        g (1 : t) '1' = 0 : 1 : t
+        g (i : t) '0' = 0 : i : t
         g (i : t) '1' = i + 1 : t
         g t _ = t
 
@@ -61,7 +61,7 @@ unchurch = fromBin . map uncbool . unclist
     where
         fromBin :: [Bool] -> [Char]
         fromBin x
-            | null $ drop 7 x = ""
+            | null $ drop 7 x = []
             | otherwise = toEnum (foldl (\ y z -> 2 * y + fromEnum z) 0 $ take 8 x) : fromBin (drop 8 x)
 
         uncbool :: Expr -> Bool
