@@ -45,7 +45,13 @@ eval (A x y) = apply (eval x) $ eval y
         beta' i j (A x y) = A (beta' i j x) $ beta' i j y
 
 encode8 :: [Char] -> Expr
-encode8 = foldr (\ x -> L . A (A (I 0) $ L $ L $ iterate (A $ I 1) (I 0) !! fromEnum x)) (L $ L $ I 0)
+encode8 = clist . map (cint . fromEnum)
+    where
+        clist :: [Expr] -> Expr
+        clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
+
+        cint :: Int -> Expr
+        cint = L . L . (iterate (A $ I 1) (I 0) !!)
 
 decode8 :: Expr -> [Char]
 decode8 = map (toEnum . uncint) . unclist
