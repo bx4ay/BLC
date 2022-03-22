@@ -8,7 +8,7 @@ Haskell で書かれた [binary lambda calculus](https://esolangs.org/wiki/Binar
 正しく動作する場合があることが示されています：
 ```console
 $ cat skk.blc
-01  01  00 00 00 01 01 1110 10 01 110 10  00 00 110  00 00 110
+01 01 00000001011110100111010 0000110 0000110
 $ cat test.in
 Hello, world!
 $ runghc blc.hs skk.blc < test.in
