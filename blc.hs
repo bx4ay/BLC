@@ -4,20 +4,20 @@ import System.Environment (getArgs)
 data Expr = I Int | L Expr | A Expr Expr
 
 fromCode :: [Char] -> Expr
-fromCode = head . foldl f [] . snd . foldl g (Nothing, [])
+fromCode = head . foldl f [] . tail . foldl g [- 1]
     where
         f :: [Expr] -> Int -> [Expr]
         f (x : t) 0 = L x : t
         f (x : y : t) 1 = A x y : t
         f t i = I (- i - 1) : t
 
-        g :: (Maybe Int, [Int]) -> Char -> (Maybe Int, [Int])
-        g (Nothing, t) '0' = (Just 0, t)
-        g (Nothing, t) '1' = (Just 1, t)
-        g (Just 0, t) '0' = (Nothing, 0 : t)
-        g (Just 0, t) '1' = (Nothing, 1 : t)
-        g (Just i, t) '0' = (Nothing, - i : t)
-        g (Just i, t) '1' = (Just $ i + 1, t)
+        g :: [Int] -> Char -> [Int]
+        g (- 1 : t) '0' = 0 : t
+        g (- 1 : t) '1' = 1 : t
+        g (0 : t) '0' = - 1 : 0 : t
+        g (0 : t) '1' = - 1 : 1 : t
+        g (i : t) '0' = - 1 : - i : t
+        g (i : t) '1' = i + 1 : t
         g t _ = t
 
 eval :: Expr -> Expr
