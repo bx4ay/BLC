@@ -1,5 +1,6 @@
 import Data.List (unfoldr)
 import System.Environment (getArgs)
+import Text.Read (Lexeme(Char))
 
 data Expr = I Int | L Expr | A Expr Expr
 
@@ -45,29 +46,36 @@ fromCode = head . foldl f [] . tail . foldl g [0]
         g t _ = t
 
 church :: [Char] -> Expr
-church = clist . concatMap cbool
+church = clist . map cbool . concatMap toBin
     where
         clist :: [Expr] -> Expr
         clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
 
-        cbool :: Char -> [Expr]
-        cbool '1' = [L $ L $ I 1]
-        cbool '0' = [L $ L $ I 0]
-        cbool _ = []
+        cbool :: Bool -> Expr
+        cbool = L . L . I . fromEnum
+
+        toBin :: Char -> [Bool]
+        toBin '1' = [True]
+        toBin '0'= [False]
+        toBin _ = []
 
 unchurch :: Expr -> [Char]
-unchurch = map uncbool . unclist
+unchurch = map (fromBin . uncbool) . unclist
     where
-        uncbool :: Expr -> Char
-        uncbool (L (L (I 1))) = '1'
-        uncbool (L (L (I 0))) = '0'
+        fromBin :: Bool -> Char
+        fromBin True = '1'
+        fromBin False = '0'
+
+        uncbool :: Expr -> Bool
+        uncbool (L (L (I 1))) = True
+        uncbool (L (L (I 0))) = False
         uncbool x = uncbool $ eval $ A (A x $ L $ L $ I 1) $ L $ L $ I 0
 
         unclist :: Expr -> [Expr]
         unclist (L (L (I 0))) = []
         unclist (L (A (A (I 0) x) y)) = x : unclist y
         unclist x
-            | uncbool (eval $ A (A x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1) == '1' = []
+            | uncbool (eval $ A (A x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1) = []
             | otherwise = eval (A x $ L $ L $ I 1) : unclist (eval $ A x $ L $ L $ I 0)
 
 main :: IO ()
