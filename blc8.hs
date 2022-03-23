@@ -45,7 +45,7 @@ fromCode = head . foldl f [] . tail . foldl g [0]
         g t _ = t
 
 church8 :: [Char] -> Expr
-church8 = clist . map (clist . map cbool . toBin)
+church8 = clist . map (clist . map cbool . toBin8)
     where
         clist :: [Expr] -> Expr
         clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
@@ -53,14 +53,14 @@ church8 = clist . map (clist . map cbool . toBin)
         cbool :: Bool -> Expr
         cbool = L . L . I . fromEnum
 
-        toBin :: Char -> [Bool]
-        toBin = reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum
+        toBin8 :: Char -> [Bool]
+        toBin8 = reverse . take 8 . unfoldr (\ x -> Just (odd x, div x 2)) . fromEnum
 
 unchurch8 :: Expr -> [Char]
-unchurch8 = map (fromBin . map uncbool . unclist) . unclist
+unchurch8 = map (fromBin8 . map uncbool . unclist) . unclist
     where
-        fromBin :: [Bool] -> Char
-        fromBin = toEnum . foldl (\ y z -> 2 * y + fromEnum z) 0
+        fromBin8 :: [Bool] -> Char
+        fromBin8 = toEnum . foldl (\ y z -> 2 * y + fromEnum z) 0
 
         uncbool :: Expr -> Bool
         uncbool (L (L (I 1))) = True
