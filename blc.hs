@@ -38,7 +38,7 @@ parse = head . parse' . filter (`elem` "01")
         parse' _ = []
 
 church :: [Char] -> Expr
-church = clist . map cbool . concatMap toBin
+church = clist . map (cbool . toBin) . filter (`elem` "01")
     where
         clist :: [Expr] -> Expr
         clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
@@ -46,10 +46,8 @@ church = clist . map cbool . concatMap toBin
         cbool :: Bool -> Expr
         cbool = L . L . I . fromEnum
 
-        toBin :: Char -> [Bool]
-        toBin '1' = [True]
-        toBin '0'= [False]
-        toBin _ = []
+        toBin :: Char -> Bool
+        toBin = (== '1')
 
 unchurch :: Expr -> [Char]
 unchurch = map (fromBin . uncbool) . unclist
