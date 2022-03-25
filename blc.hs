@@ -1,6 +1,5 @@
 import Data.List (unfoldr)
 import System.Environment (getArgs)
-import Text.Read (Lexeme(Char))
 
 data Expr = I Int | L Expr | A Expr Expr
 
@@ -28,22 +27,16 @@ eval (A x y) = apply (eval x) $ eval y
         beta' i j (L x) = L $ beta' (i + 1) j x
         beta' i j (A x y) = A (beta' i j x) $ beta' i j y
 
-fromCode :: [Char] -> Expr
-fromCode = head . foldl f [] . tail . foldl g [0]
+parse :: [Char] -> Expr
+parse = head . parse'
     where
-        f :: [Expr] -> Int -> [Expr]
-        f (x : t) 0 = L x : t
-        f (x : y : t) 1 = A x y : t
-        f t i = I (i - 2) : t
-
-        g :: [Int] -> Char -> [Int]
-        g (0 : t) '0' = 1 : t
-        g (0 : t) '1' = 2 : t
-        g (1 : t) '0' = 0 : 0 : t
-        g (1 : t) '1' = 0 : 1 : t
-        g (i : t) '0' = 0 : i : t
-        g (i : t) '1' = i + 1 : t
-        g t _ = t
+        parse' :: [Char] -> [Expr]
+        parse' ('0' : '0' : t) = (\ (x : y) -> L x : y) $ parse' t
+        parse' ('0' : '1' : t) = (\ (x : y : z) -> A x y : z) $ parse' t
+        parse' ('1' : '0' : t) = I 0 : parse' t
+        parse' ('1' : t) = (\ (I i : x) -> I (i + 1) : x) $ parse' t
+        parse' (_ : t) = parse' t
+        parse' _ = []
 
 church :: [Char] -> Expr
 church = clist . map cbool . concatMap toBin
@@ -83,4 +76,4 @@ main = do
     [path] <- getArgs
     code <- readFile path
     input <- getContents
-    putStr $ unchurch $ A (fromCode code) $ church input
+    putStr $ unchurch $ A (parse code) $ church input
