@@ -9,7 +9,7 @@ eval (L x) = L $ eval x
 eval (A x y) = apply (eval x) $ eval y
     where
         apply :: Expr -> Expr -> Expr
-        apply (L x) y = eval $ beta 0 x y
+        apply (L x) y = beta 0 x y
         apply x y = A x y
 
         beta :: Int -> Expr -> Expr -> Expr
@@ -18,14 +18,14 @@ eval (A x y) = apply (eval x) $ eval y
             | i == j = beta' 0 i x
             | otherwise = I j
         beta i (L x) y = L $ beta (i + 1) x y
-        beta i (A x y) z = A (beta i x z) $ beta i y z
+        beta i (A x y) z = apply (beta i x z) $ beta i y z
 
         beta' :: Int -> Int -> Expr -> Expr
         beta' i j (I k)
             | i <= k = I $ j + k
             | otherwise = I k
         beta' i j (L x) = L $ beta' (i + 1) j x
-        beta' i j (A x y) = A (beta' i j x) $ beta' i j y
+        beta' i j (A x y) = apply (beta' i j x) $ beta' i j y
 
 parse :: [Char] -> Expr
 parse = head . parse' . filter (`elem` "01")
