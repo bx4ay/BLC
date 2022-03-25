@@ -28,14 +28,13 @@ eval (A x y) = apply (eval x) $ eval y
         beta' i j (A x y) = A (beta' i j x) $ beta' i j y
 
 parse :: [Char] -> Expr
-parse = head . parse'
+parse = head . parse' . filter (`elem` "01")
     where
         parse' :: [Char] -> [Expr]
         parse' ('0' : '0' : t) = (\ (x : y) -> L x : y) $ parse' t
         parse' ('0' : '1' : t) = (\ (x : y : z) -> A x y : z) $ parse' t
         parse' ('1' : '0' : t) = I 0 : parse' t
         parse' ('1' : t) = (\ (I i : x) -> I (i + 1) : x) $ parse' t
-        parse' (_ : t) = parse' t
         parse' _ = []
 
 church :: [Char] -> Expr
