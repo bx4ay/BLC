@@ -1,5 +1,5 @@
 # BLC
-Haskell で書かれた [binary lambda calculus](https://esolangs.org/wiki/Binary_lambda_calculus) のインタプリタ
+Haskell で書かれた [binary lambda calculus](https://tromp.github.io/cl/Binary_lambda_calculus.html) のインタプリタ
 
 `README.md` - これ  
 `blc.hs` - BLC のインタプリタ  
@@ -17,10 +17,6 @@ Haskell で書かれた [binary lambda calculus](https://esolangs.org/wiki/Binar
 BLC では、文字 (`0`か`1`) は Church ブーリアン、文字列はそれらの Church リストとしてエンコードされます。
 
 BLC8 では、文字は Church ブーリアンの Church リスト、文字列はそれらの Church リストとしてエンコードされます。
-
-詳しくは：
-- [John's Lambda Calculus and Combinatory Logic Playground](https://tromp.github.io/cl/cl.html)
-- [Binary lambda calculus](https://tromp.github.io/cl/Binary_lambda_calculus.html)
 
 ## インタプリタについて
 例：
