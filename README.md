@@ -31,7 +31,7 @@ Hello, world!
 (`skk.blc`は SKI コンビネータ計算の **S K K** にあたる、入力をそのまま返すプログラム)
 - 入力は標準入力から読み込まれ、出力は標準出力に書き込まれます。
 - BLC のソースコードと入力、BLC8 のソースコードに含まれる`0`と`1`以外の文字は無視されます。
-- `[program-file].blc`の代わりに`-e "[program-code]"`と記述すれば、`[program-code]`自体が BLC / BLC8 のコードとして解釈・実行されます。
+- `[program-file].blc`の代わりに`-e "[program-code]"`と入力すれば、`[program-code]`自体が BLC / BLC8 のコードとして解釈・実行されます。
 - 複数のプログラムを引数として与えた場合、それらは逆向きに関数合成されます。つまり、`blc code1 code2`は`blc code1 | blc code2`のような意味になります。
 
 ### できないこと
