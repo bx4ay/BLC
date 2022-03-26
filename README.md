@@ -6,7 +6,7 @@ Haskell で書かれた [binary lambda calculus](https://tromp.github.io/cl/Bina
 `blc8.hs` - BLC8 のインタプリタ
 
 ## BLC ってなに
-型なしラムダ計算を [de Bruijn インデックス](https://ja.wikipedia.org/wiki/%E3%83%89%E3%83%BB%E3%83%96%E3%83%A9%E3%82%A6%E3%83%B3%E3%83%BB%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9) 記法で書いてバイナリにエンコードしたもの。
+型なしラムダ計算を [de Bruijn インデックス](https://ja.wikipedia.org/wiki/%E3%83%89%E3%83%BB%E3%83%96%E3%83%A9%E3%82%A6%E3%83%B3%E3%83%BB%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9) 記法で書いてバイナリにエンコードしたものです。
 
 &emsp;\[ *λ* expr \] = `00` \[ expr \]  
 &emsp;\[ expr<sub>1</sub> expr<sub>2</sub> \] = `01` \[ expr<sub>1</sub> \] \[ expr<sub>2</sub> \]  
