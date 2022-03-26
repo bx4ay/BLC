@@ -7,11 +7,12 @@ Haskell で書かれた [binary lambda calculus](https://esolangs.org/wiki/Binar
 
 「`0`と`1`からなる文字列」に含まれるその他の文字は無視されます：
 ```console
+$ ghc blc8.hs
 $ cat skk.blc
 01 01 00000001011110100111010 0000110 0000110
 $ cat test.in
 Hello, world!
-$ runghc blc8.hs skk.blc < test.in
+$ ./blc8 skk.blc < test.in
 Hello, world!
 ```
 (`skk.blc`は SKI コンビネータ計算の **S K K** にあたる、入力をそのまま返すプログラム)
