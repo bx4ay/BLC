@@ -73,4 +73,4 @@ main = do
     [path] <- getArgs
     code <- readFile path
     input <- getContents
-    putStr $ unchurch $ A (parse code) $ church input
+    putStrLn $ unchurch $ A (parse code) $ church input
