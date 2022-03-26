@@ -2,18 +2,20 @@
 Haskell で書かれた [binary lambda calculus](https://esolangs.org/wiki/Binary_lambda_calculus) のインタプリタ
 
 `README.md` - これ  
-`blc.hs` - BLC のインタプリタ (ソースコードと入出力は`0`と`1`からなる文字列)  
-`blc8.hs` - BLC8 のインタプリタ (ソースコードは`0`と`1`からなる文字列、入出力は任意の文字列)
+`blc.hs` - BLC のインタプリタ  
+`blc8.hs` - BLC8 のインタプリタ
 
 ## BLC ってなに
-型なしラムダ計算をバイナリにエンコードしたもの。
+型なしラムダ計算を [de Bruijn インデックス](https://ja.wikipedia.org/wiki/%E3%83%89%E3%83%BB%E3%83%96%E3%83%A9%E3%82%A6%E3%83%B3%E3%83%BB%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9) 記法で書いてバイナリにエンコードしたもの。
 
 &emsp;\[ *λ* expr \] = `00` \[ expr \]  
 &emsp;\[ expr<sub>1</sub> expr<sub>2</sub> \] = `01` \[ expr<sub>1</sub> \] \[ expr<sub>2</sub> \]  
 &emsp;\[ *i* \] = `1`<sup>*i*</sup> `0`
 
-プログラムは入力を受け取り、出力を返す関数として扱われます。  
-BLC では、文字 (`0`か`1`) は Church ブーリアン、文字列はそれらの Church リストとしてエンコードされます。  
+プログラムは入力を受け取り、出力を返す関数として扱われます。
+
+BLC では、文字 (`0`か`1`) は Church ブーリアン、文字列はそれらの Church リストとしてエンコードされます。
+
 BLC8 では、文字は Church ブーリアンの Church リスト、文字列はそれらの Church リストとしてエンコードされます。
 
 詳しくは [John's Lambda Calculus and Combinatory Logic Playground](https://tromp.github.io/cl/cl.html) に [説明](https://tromp.github.io/cl/Binary_lambda_calculus.html) があります。
