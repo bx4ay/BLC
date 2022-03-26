@@ -1,6 +1,6 @@
 import Data.List (unfoldr)
 import System.Environment (getArgs)
-import System.IO (hSetBuffering, stdout, BufferMode (NoBuffering))
+import System.IO (hSetBinaryMode, hSetBuffering, stdin, stdout, BufferMode (NoBuffering))
 
 data Expr = I Int | L Expr | A Expr Expr
 
@@ -65,8 +65,16 @@ unchurch = map (fromBin . uncBool) . uncList
 
 main :: IO ()
 main = do
-    [path] <- getArgs
-    code <- readFile path
+    args <- getArgs
+    let b = head args == "-b"
+    codes <- sequence $ f $ if b then tail args else args
+    hSetBinaryMode stdin b
     input <- getContents
+    hSetBinaryMode stdout b
     hSetBuffering stdout NoBuffering
-    putStrLn $ unchurch $ app (parse code) $ church input
+    putStr $ unchurch $ foldl1 (flip app) $ church input : (parse <$> codes)
+    where
+        f :: [[Char]] -> [IO [Char]]
+        f ("-e" : x : t) = pure x : f t
+        f (x : t) = readFile x : f t
+        f _ = []
