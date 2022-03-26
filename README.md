@@ -5,7 +5,21 @@ Haskell で書かれた [binary lambda calculus](https://esolangs.org/wiki/Binar
 `blc.hs` - BLC のインタプリタ (ソースコードと入出力は`0`と`1`からなる文字列)  
 `blc8.hs` - BLC8 のインタプリタ (ソースコードは`0`と`1`からなる文字列、入出力は任意の文字列)
 
-「`0`と`1`からなる文字列」に含まれるその他の文字は無視されます：
+## BLC ってなに
+型なしラムダ計算をバイナリにエンコードしたもの。
+
+&emsp;\[ *λ* expr \] = `00` \[ expr \]  
+&emsp;\[ expr<sub>1</sub> expr<sub>2</sub> \] = `01` \[ expr<sub>1</sub> \] \[ expr<sub>2</sub> \]  
+&emsp;\[ *i* \] = `1`<sup>*i*</sup> `0`
+
+プログラムは入力を受け取り、出力を返す関数として扱われます。  
+BLC では、文字 (`0`か`1`) は Church ブーリアン、文字列はそれらの Church リストとしてエンコードされます。  
+BLC8 では、文字は Church ブーリアンの Church リスト、文字列はそれらの Church リストとしてエンコードされます。
+
+詳しくは [John's Lambda Calculus and Combinatory Logic Playground](https://tromp.github.io/cl/cl.html) に [説明](https://tromp.github.io/cl/Binary_lambda_calculus.html) があります。
+
+## インタプリタについて
+例：
 ```console
 $ ghc blc8.hs
 $ cat skk.blc
@@ -16,16 +30,15 @@ $ ./blc8 skk.blc < test.in
 Hello, world!
 ```
 (`skk.blc`は SKI コンビネータ計算の **S K K** にあたる、入力をそのまま返すプログラム)
+- 入力は標準入力から読み込まれ、出力は標準出力に書き込まれます。
+- BLC のソースコードと入力、BLC8 のソースコードに含まれる`0`と`1`以外の文字は無視されます。
+- `[program-file].blc`の代わりに`-e "[program-code]"`と記述すれば、`[program-code]`自体が BLC / BLC8 のコードとして解釈・実行されます。
+- 複数のプログラムを引数として与えた場合、それらは逆向きに関数合成されます。つまり、`blc code1 code2`は`blc code1 | blc code2`のような意味になります。
 
-できること：
+### できること
 - β-簡約
 - 遅延評価
 
-できないこと：
+### できないこと
 - η-変換
 - 適切なエラーを吐くこと
-
-## BLC ってなに
-型なしラムダ計算をバイナリにエンコードしたもの。
-
-詳しくは [John's Lambda Calculus and Combinatory Logic Playground](https://tromp.github.io/cl/cl.html) に [説明](https://tromp.github.io/cl/Binary_lambda_calculus.html) があります。
