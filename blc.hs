@@ -49,8 +49,7 @@ unchurch :: Expr -> [Char]
 unchurch = map (fromBin . uncBool) . uncList
     where
         fromBin :: Bool -> Char
-        fromBin True = '1'
-        fromBin False = '0'
+        fromBin x = if x then '1' else '0'
 
         uncBool :: Expr -> Bool
         uncBool (L (L (I 1))) = True
