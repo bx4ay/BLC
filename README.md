@@ -19,7 +19,6 @@ BLC では、文字 (`0`か`1`) は Church ブーリアン、文字列はそれ�
 BLC8 では、文字は Church ブーリアンの Church リスト、文字列はそれらの Church リストとしてエンコードされます。
 
 ## インタプリタについて
-例：
 ```console
 $ ghc blc8.hs
 $ cat skk.blc
@@ -35,10 +34,6 @@ Hello, world!
 - `[program-file].blc`の代わりに`-e "[program-code]"`と記述すれば、`[program-code]`自体が BLC / BLC8 のコードとして解釈・実行されます。
 - 複数のプログラムを引数として与えた場合、それらは逆向きに関数合成されます。つまり、`blc code1 code2`は`blc code1 | blc code2`のような意味になります。
 
-### できること
-- β-簡約
-- 遅延評価
-
 ### できないこと
 - η-変換
-- 適切なエラーを吐くこと
+- 適切なエラーを出力すること
