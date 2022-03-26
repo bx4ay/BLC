@@ -1,5 +1,6 @@
 import Data.List (unfoldr)
 import System.Environment (getArgs)
+import System.IO (hSetBuffering, stdout, BufferMode (NoBuffering))
 
 data Expr = I Int | L Expr | A Expr Expr
 
@@ -72,4 +73,5 @@ main = do
     [path] <- getArgs
     code <- readFile path
     input <- getContents
+    hSetBuffering stdout NoBuffering
     putStr $ unchurch8 $ A (parse code) $ church8 input
