@@ -28,4 +28,4 @@ Hello, world!
 ## BLC ってなに
 型なしラムダ計算をバイナリにエンコードしたもの。
 
-詳しくは [tromp.github.io/cl/](https://tromp.github.io/cl/cl.html) に [説明](https://tromp.github.io/cl/Binary_lambda_calculus.html) があります。
+詳しくは [John's Lambda Calculus and Combinatory Logic Playground](https://tromp.github.io/cl/cl.html) に [説明](https://tromp.github.io/cl/Binary_lambda_calculus.html) があります。
