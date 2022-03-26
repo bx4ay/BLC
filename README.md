@@ -18,7 +18,9 @@ BLC では、文字 (`0`か`1`) は Church ブーリアン、文字列はそれ�
 
 BLC8 では、文字は Church ブーリアンの Church リスト、文字列はそれらの Church リストとしてエンコードされます。
 
-詳しくは [John's Lambda Calculus and Combinatory Logic Playground](https://tromp.github.io/cl/cl.html) に [説明](https://tromp.github.io/cl/Binary_lambda_calculus.html) があります。
+詳しくは：
+- [John's Lambda Calculus and Combinatory Logic Playground](https://tromp.github.io/cl/cl.html)
+- [Binary lambda calculus](https://tromp.github.io/cl/Binary_lambda_calculus.html)
 
 ## インタプリタについて
 例：
