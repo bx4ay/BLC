@@ -31,42 +31,42 @@ parse :: [Char] -> Expr
 parse = head . parse' . filter (`elem` "01")
     where
         parse' :: [Char] -> [Expr]
-        parse' ('0' : '0' : t) = (\ (x : y) -> L x : y) $ parse' t
-        parse' ('0' : '1' : t) = (\ (x : y : z) -> A x y : z) $ parse' t
+        parse' ('0' : '0' : t) = (\ (x : t) -> L x : t) $ parse' t
+        parse' ('0' : '1' : t) = (\ (x : y : t) -> A x y : t) $ parse' t
         parse' ('1' : '0' : t) = I 0 : parse' t
-        parse' ('1' : t) = (\ (I i : x) -> I (i + 1) : x) $ parse' t
+        parse' ('1' : t) = (\ (I i : t) -> I (i + 1) : t) $ parse' t
         parse' _ = []
 
 church :: [Char] -> Expr
-church = clist . map (cbool . toBin) . filter (`elem` "01")
+church = cList . map (cBool . toBin) . filter (`elem` "01")
     where
-        clist :: [Expr] -> Expr
-        clist = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
+        cList :: [Expr] -> Expr
+        cList = foldr (\ x -> L . A (A (I 0) x)) $ L $ L $ I 0
 
-        cbool :: Bool -> Expr
-        cbool = L . L . I . fromEnum
+        cBool :: Bool -> Expr
+        cBool = L . L . I . fromEnum
 
         toBin :: Char -> Bool
         toBin = (== '1')
 
 unchurch :: Expr -> [Char]
-unchurch = map (fromBin . uncbool) . unclist
+unchurch = map (fromBin . uncBool) . uncList
     where
         fromBin :: Bool -> Char
         fromBin True = '1'
         fromBin False = '0'
 
-        uncbool :: Expr -> Bool
-        uncbool (L (L (I 1))) = True
-        uncbool (L (L (I 0))) = False
-        uncbool x = uncbool $ eval $ A (A x $ L $ L $ I 1) $ L $ L $ I 0
+        uncBool :: Expr -> Bool
+        uncBool (L (L (I 1))) = True
+        uncBool (L (L (I 0))) = False
+        uncBool x = uncBool $ eval $ A (A x $ L $ L $ I 1) $ L $ L $ I 0
 
-        unclist :: Expr -> [Expr]
-        unclist (L (L (I 0))) = []
-        unclist (L (A (A (I 0) x) y)) = x : unclist y
-        unclist x
-            | uncbool (eval $ A (A x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1) = []
-            | otherwise = eval (A x $ L $ L $ I 1) : unclist (eval $ A x $ L $ L $ I 0)
+        uncList :: Expr -> [Expr]
+        uncList (L (L (I 0))) = []
+        uncList (L (A (A (I 0) x) y)) = x : uncList y
+        uncList x
+            | uncBool (eval $ A (A x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1) = []
+            | otherwise = eval (A x $ L $ L $ I 1) : uncList (eval $ A x $ L $ L $ I 0)
 
 main :: IO ()
 main = do
