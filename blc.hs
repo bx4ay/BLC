@@ -66,15 +66,25 @@ unchurch = map (fromBin . uncBool) . uncList
 main :: IO ()
 main = do
     args <- getArgs
-    let b = head args == "-b"
-    codes <- sequence $ f $ if b then tail args else args
+    (b, codes) <- f args
     hSetBinaryMode stdin b
-    input <- getContents
     hSetBinaryMode stdout b
     hSetBuffering stdout NoBuffering
-    putStr $ unchurch $ foldl1 (flip app) $ church input : (parse <$> codes)
+    eval codes
     where
-        f :: [[Char]] -> [IO [Char]]
-        f ("-e" : x : t) = pure x : f t
-        f (x : t) = readFile x : f t
-        f _ = []
+        f :: [[Char]] -> IO (Bool, [[Char]])
+        f ("-b" : x) = sequence (True, sequence $ g x)
+        f x = sequence (False, sequence $ g x)
+
+        g :: [[Char]] -> [IO [Char]]
+        g ("-e" : x : t) = pure x : g t
+        g (x : t) = readFile x : g t
+        g _ = []
+
+        eval :: [[Char]] -> IO ()
+        eval [] = do
+            code <- getLine
+            eval [code]
+        eval codes = do
+            input <- getContents
+            putStr $ unchurch $ foldl1 (flip app) $ (if null codes then parse else church) input : (parse <$> codes)
