@@ -70,21 +70,14 @@ main = do
     hSetBinaryMode stdin b
     hSetBinaryMode stdout b
     hSetBuffering stdout NoBuffering
-    eval codes
+    input <- getContents
+    putStr $ unchurch8 $ foldl1 (flip app) $ church8 input : (parse <$> codes)
     where
         f :: [[Char]] -> IO (Bool, [[Char]])
         f ("-b" : x) = sequence (True, sequence $ g x)
         f x = sequence (False, sequence $ g x)
 
         g :: [[Char]] -> [IO [Char]]
-        g ("-e" : x : t) = pure x : g t
-        g (x : t) = readFile x : g t
-        g _ = []
-
-        eval :: [[Char]] -> IO ()
-        eval [] = do
-            code <- getLine
-            eval [code]
-        eval codes = do
-            input <- getContents
-            putStr $ unchurch8 $ foldl1 (flip app) $ church8 input : (parse <$> codes)
+        g ("-e" : x : t) = pure x : if null t then [] else g t
+        g (x : t) = readFile x : if null t then [] else g t
+        g _ = [getLine]
