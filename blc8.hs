@@ -87,4 +87,4 @@ main = do
             eval [code]
         eval codes = do
             input <- getContents
-            putStr $ unchurch8 $ foldl1 (flip app) $ (if null codes then parse else church8) input : (parse <$> codes)
+            putStr $ unchurch8 $ foldl1 (flip app) $ church8 input : (parse <$> codes)
