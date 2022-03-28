@@ -49,7 +49,7 @@ unchurch8 :: Expr -> [Char]
 unchurch8 = map (fromBin8 . map uncBool . uncList) . uncList
     where
         fromBin8 :: [Bool] -> Char
-        fromBin8 = toEnum . foldl (\ x y -> 2 * x + fromEnum y) 0
+        fromBin8 = toEnum . foldl (\ x y -> 2 * x + fromEnum y) 0 . take 8
 
         uncBool :: Expr -> Bool
         uncBool (L (L (I 1))) = True
