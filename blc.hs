@@ -37,7 +37,7 @@ church :: [Char] -> Expr
 church = cList . map (cBool . toBin) . filter (`elem` "01")
     where
         cList :: [Expr] -> Expr
-        cList = foldr (\ x -> L . app (app (I 0) x)) $ L $ L $ I 0
+        cList = foldr (\ x -> L . app (A (I 0) x)) $ L $ L $ I 0
 
         cBool :: Bool -> Expr
         cBool = L . L . I . fromEnum
@@ -71,7 +71,7 @@ main = do
     hSetBinaryMode stdout b
     hSetBuffering stdout NoBuffering
     input <- getContents
-    putStr $ unchurch $ foldl1 (flip app) $ church input : (parse <$> codes)
+    putStr $ unchurch $ foldl1 (flip app) $ church input : map parse codes
     where
         f :: [[Char]] -> IO (Bool, [[Char]])
         f ("-b" : x) = sequence (True, sequence $ g x)
