@@ -24,7 +24,7 @@ app (L x) y = beta 0 x y
 app x y = A x y
 
 parse :: [Char] -> Expr
-parse = head . parse' . filter (`elem` "01")
+parse = head . parse' . filter (`elem` "01") . concatMap (takeWhile (/= '#')) . lines
     where
         parse' :: [Char] -> [Expr]
         parse' ('0' : '0' : t) = (\ (x : t) -> L x : t) $ parse' t
