@@ -1,67 +1,58 @@
-import Data.List (unfoldr)
 import System.Environment (getArgs)
 import System.IO (hSetBinaryMode, hSetBuffering, stdin, stdout, BufferMode (NoBuffering))
 
 data Expr = I Int | L Expr | A Expr Expr
 
-app :: Expr -> Expr -> Expr
-app (L x) y = beta 0 x y
+a :: Expr -> Expr -> Expr
+a (L x) y = b 0 x y
     where
-        beta :: Int -> Expr -> Expr -> Expr
-        beta i (I j) x
+        b :: Int -> Expr -> Expr -> Expr
+        b i (I j) x
             | i < j = I $ j - 1
-            | i == j = beta' 0 i x
+            | i == j = b' 0 i x
             | otherwise = I j
-        beta i (L x) y = L $ beta (i + 1) x y
-        beta i (A x y) z = app (beta i x z) $ beta i y z
+        b i (L x) y = L $ b (i + 1) x y
+        b i (A x y) z = a (b i x z) $ b i y z
 
-        beta' :: Int -> Int -> Expr -> Expr
-        beta' i j (I k)
+        b' :: Int -> Int -> Expr -> Expr
+        b' i j (I k)
             | i <= k = I $ j + k
             | otherwise = I k
-        beta' i j (L x) = L $ beta' (i + 1) j x
-        beta' i j (A x y) = app (beta' i j x) $ beta' i j y
-app x y = A x y
+        b' i j (L x) = L $ b' (i + 1) j x
+        b' i j (A x y) = a (b' i j x) $ b' i j y
+a x y = A x y
 
 parse :: [Char] -> Expr
 parse = head . parse' . filter (`elem` "01") . concatMap (takeWhile (/= '#')) . lines
     where
         parse' :: [Char] -> [Expr]
         parse' ('0' : '0' : t) = (\ (x : t) -> L x : t) $ parse' t
-        parse' ('0' : '1' : t) = (\ (x : y : t) -> app x y : t) $ parse' t
+        parse' ('0' : '1' : t) = (\ (x : y : t) -> a x y : t) $ parse' t
         parse' ('1' : '0' : t) = I 0 : parse' t
         parse' ('1' : t) = (\ (I i : t) -> I (i + 1) : t) $ parse' t
         parse' _ = []
 
 church :: [Char] -> Expr
-church = cList . map (cBool . toBin) . filter (`elem` "01")
+church = cL . map (cB . (== '1')) . filter (`elem` "01")
     where
-        cList :: [Expr] -> Expr
-        cList = foldr (\ x -> L . app (A (I 0) x)) $ L $ L $ I 0
+        cL :: [Expr] -> Expr
+        cL = foldr (\ x -> L . a (A (I 0) x)) $ L $ L $ I 0
 
-        cBool :: Bool -> Expr
-        cBool = L . L . I . fromEnum
-
-        toBin :: Char -> Bool
-        toBin = (== '1')
+        cB :: Bool -> Expr
+        cB = L . L . I . fromEnum
 
 unchurch :: Expr -> [Char]
-unchurch = map (fromBin . uncBool) . uncList
+unchurch = map (("01" !!) . fromEnum . uncB) . uncL
     where
-        fromBin :: Bool -> Char
-        fromBin x = if x then '1' else '0'
+        uncB :: Expr -> Bool
+        uncB (L (L (I 1))) = True
+        uncB (L (L (I 0))) = False
+        uncB x = uncB $ a (a x $ L $ L $ I 1) $ L $ L $ I 0
 
-        uncBool :: Expr -> Bool
-        uncBool (L (L (I 1))) = True
-        uncBool (L (L (I 0))) = False
-        uncBool x = uncBool $ app (app x $ L $ L $ I 1) $ L $ L $ I 0
-
-        uncList :: Expr -> [Expr]
-        uncList (L (L (I 0))) = []
-        uncList (L (A (A (I 0) x) y)) = x : uncList y
-        uncList x
-            | uncBool (app (app x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1) = []
-            | otherwise = app x (L $ L $ I 1) : uncList (app x $ L $ L $ I 0)
+        uncL :: Expr -> [Expr]
+        uncL x
+            | uncB $ a (a x $ L $ L $ L $ L $ L $ I 0) $ L $ L $ I 1 = []
+            | otherwise = a x (L $ L $ I 1) : uncL (a x $ L $ L $ I 0)
 
 main :: IO ()
 main = do
@@ -71,7 +62,7 @@ main = do
     hSetBinaryMode stdout b
     hSetBuffering stdout NoBuffering
     input <- getContents
-    putStr $ unchurch $ foldl1 (flip app) $ church input : map parse codes
+    putStrLn $ unchurch $ foldl1 (flip a) $ church input : map parse codes
     where
         f :: [[Char]] -> IO (Bool, [[Char]])
         f ("-b" : x) = sequence (True, sequence $ g x)
