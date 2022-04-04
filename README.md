@@ -2,8 +2,10 @@
 Haskell で書かれた [binary lambda calculus](https://tromp.github.io/cl/Binary_lambda_calculus.html) のインタプリタ
 
 `README.md` - これ  
-`blc.hs` - BLC のインタプリタ  
-`blc8.hs` - BLC8 のインタプリタ
+`blc.hs` - BLC のインタプリタ (素朴なもの。遅い)  
+`blc8.hs` - BLC8 のインタプリタ (素朴なもの。遅い)  
+`blc8_.hs` - BLC8 のインタプリタ (コンビネータ項に変換して計算を行うもの。速い)  
+`blc_.hs` - BLC のインタプリタ (コンビネータ項に変換して計算を行うもの。速い)
 
 ## BLC ってなに
 型なしラムダ計算を [de Bruijn インデックス](https://ja.wikipedia.org/wiki/%E3%83%89%E3%83%BB%E3%83%96%E3%83%A9%E3%82%A6%E3%83%B3%E3%83%BB%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9) 記法で書いてバイナリにエンコードしたものです。
@@ -20,7 +22,7 @@ BLC8 では、文字は Church ブーリアンの Church リスト、文字列�
 
 ## インタプリタについて
 ```
-$ blc[8] [-b] ( -e "program-code" | program-file.blc )*
+$ blc[8][_] [-b] ( -e "program-code" | program-file.blc )*
 ```
 - 入力は標準入力から読み込まれ、出力は標準出力に書き込まれます。
 - BLC のソースコードと入力、BLC8 のソースコードに含まれる`01`以外の文字は無視されます。
