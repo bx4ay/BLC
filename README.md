@@ -2,10 +2,10 @@
 Haskell で書かれた [binary lambda calculus](https://tromp.github.io/cl/Binary_lambda_calculus.html) のインタプリタ
 
 `README.md` - これ  
-`blc.hs` - BLC のインタプリタ (素朴なもの。遅い)  
-`blc8.hs` - BLC8 のインタプリタ (素朴なもの。遅い)  
-`blc8_.hs` - BLC8 のインタプリタ (コンビネータに変換して計算を行うもの。速い)  
-`blc_.hs` - BLC のインタプリタ (コンビネータに変換して計算を行うもの。速い)
+`blc.hs` - BLC のインタプリタ (素朴なもの。メモ化を行わない。遅い)  
+`blc8.hs` - BLC8 のインタプリタ (素朴なもの。メモ化を行わない。遅い)  
+`blc8_.hs` - BLC8 のインタプリタ (コンビネータに変換して計算する。速い)  
+`blc_.hs` - BLC のインタプリタ (コンビネータに変換して計算する。速い)
 
 ## BLC ってなに
 型なしラムダ計算を [de Bruijn インデックス](https://ja.wikipedia.org/wiki/%E3%83%89%E3%83%BB%E3%83%96%E3%83%A9%E3%82%A6%E3%83%B3%E3%83%BB%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9) 記法で書いてバイナリにエンコードしたものです。
